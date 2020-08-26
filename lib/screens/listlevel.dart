@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/widgets/levelCard.dart';
 
 class ListLevel extends StatefulWidget {
   @override
@@ -9,11 +10,14 @@ class ListLevel extends StatefulWidget {
 class _ListLevelState extends State<ListLevel> {
 
   final List<Level> listLevel = [
-    Level(name: "red", listChallenge: [false, false]),
-    Level(name: "green", listChallenge: [false, false]),
-    Level(name: "black", listChallenge: [true, false]),
-    Level(name: "white", listChallenge: [false, false]),
+    Level(nbLevel: 1, name: "The penguin", listChallenge: [false, false], characterImagePackageName: "BluePenguin"),
   ];
+
+  Function _onLevelCardTap(Level level) {
+    Navigator.pushNamed(context, '/game', arguments: {
+      'level': level,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,38 +28,9 @@ class _ListLevelState extends State<ListLevel> {
         backgroundColor: Colors.red,
       ),
       body: Column(
-        children: listLevel.map((level) => levelCard(level)).toList(),
-      )
-    );
-
-
-  }
-
-  Widget levelCard(Level level) {
-    return Card(
-      margin: EdgeInsets.all(20.0),
-      child: Row(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Colors.lightBlueAccent,
-                backgroundImage: AssetImage('assets/characters/slime_${level.name}.png'),
-                radius: 20.0,
-              ),
-              Text(level.name),
-            ],
-          ),
-          Row(
-            children: level.listChallenge.map((challenge) {
-              return Icon(
-                challenge ? Icons.star : Icons.star_border,
-                color: Colors.orangeAccent,
-              );
-            }).toList(),
-          ),
-        ],
+        children: listLevel.map((level) => LevelCard(level: level, onLevelCardTap: _onLevelCardTap)).toList(),
       )
     );
   }
+
 }
