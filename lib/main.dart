@@ -3,15 +3,17 @@ import 'package:pegii_app/screens/loading.dart';
 import 'package:pegii_app/screens/home.dart';
 import 'package:pegii_app/screens/game.dart';
 import 'package:pegii_app/screens/listlevel.dart';
+import 'package:pegii_app/screens/testScreen.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/home',
+    initialRoute: '/test',
     routes: {
       '/home': (context) => Home(),
       '/loading': (context) => Loading(),
       '/game': (context) => Game(),
       '/listLevel': (context) => ListLevel(),
+      '/test': (context) => TestScreen(),
     },
   ));
 }
