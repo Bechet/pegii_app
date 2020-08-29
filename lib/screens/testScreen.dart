@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pegii_app/RandomUtils.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 
@@ -11,8 +12,6 @@ class _TestScreenState extends State<TestScreen> {
   final List<JankenState> listJankenStateTop = [];
   final List<JankenState> listJankenStateBottom = [];
 
-  String aText = "est";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,6 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   Widget screenContent() {
-    print(listJankenStateTop);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -62,7 +60,6 @@ class _TestScreenState extends State<TestScreen> {
               image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
               width: 40,
               height: 40,
-
             ),
           );
         }).toList(),
@@ -73,8 +70,8 @@ class _TestScreenState extends State<TestScreen> {
 
   void addJankenState() {
     // Brut test
-    JankenFormat jankenFormatTop = JankenFormat.Stone;
-    JankenFormat jankenFormatBottom = JankenFormat.Scissors;
+    JankenFormat jankenFormatTop = RandomUtils.randomJankenFormat();
+    JankenFormat jankenFormatBottom = RandomUtils.randomJankenFormat();
 
     JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
     JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
