@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/janken.dart';
+import 'package:pegii_app/bean/jankenState.dart';
 
 class TestScreen extends StatefulWidget {
   @override
@@ -25,10 +26,6 @@ class _TestScreenState extends State<TestScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("$aText"),
-        Image(
-          image: AssetImage("assets/janken/choki_500.png"),
-        ),
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(
@@ -56,19 +53,36 @@ class _TestScreenState extends State<TestScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: listJankenStateTop.map((jankenState) {
-          return Image(
-            image: AssetImage("assets/janken/${mapJankenStateImage[jankenState]}"),
-            width: 40,
-            height: 40,
+        children: listJankenState.map((jankenState) {
+          return Container(
+            color: jankenState.jankenResult == JankenResult.win ? Colors.green :
+              jankenState.jankenResult == JankenResult.lose ? Colors.red :
+                  Colors.yellow,
+            child: Image(
+              image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
+              width: 40,
+              height: 40,
+
+            ),
           );
         }).toList(),
       ),
     );
   }
 
+
   void addJankenState() {
-    listJankenStateTop.add(JankenState.Scissors);
-    listJankenStateBottom.add(JankenState.Scissors);
+    // Brut test
+    JankenFormat jankenFormatTop = JankenFormat.Stone;
+    JankenFormat jankenFormatBottom = JankenFormat.Scissors;
+
+    JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
+    JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
+
+    JankenState jankenStateTop = new JankenState(jankenFormat: jankenFormatTop, jankenResult: jankenResultTop);
+    JankenState jankenStateBottom = new JankenState(jankenFormat: jankenFormatBottom, jankenResult: jankenResultBottom);
+
+    listJankenStateTop.add(jankenStateTop);
+    listJankenStateBottom.add(jankenStateBottom);
   }
 }

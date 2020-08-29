@@ -48,7 +48,7 @@ class _GameState extends State<Game> {
                         Container(
                           margin: EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 20.0),
                           child: Image(
-                            image: AssetImage('assets/janken/choki_500.png'),
+                            image: AssetImage('assets/janken/choki_500_interior_transparency.png'),
                           ),
                         ),
                         // Enemy image
