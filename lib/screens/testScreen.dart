@@ -7,40 +7,38 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
+  final List<JankenState> listJankenStateTop = [];
+  final List<JankenState> listJankenStateBottom = [];
 
-  final List<String> listJankenState = [];
   String aText = "est";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text("!! Test Screen !!")
-      ),
-      body : screenContent(),
+      appBar: AppBar(title: Text("!! Test Screen !!")),
+      body: screenContent(),
     );
   }
 
   Widget screenContent() {
-    print(listJankenState);
+    print(listJankenStateTop);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text("$aText"),
         Image(
-          image: AssetImage("assets/janken/choki.png"),
+          image: AssetImage("assets/janken/choki_500.png"),
         ),
         SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-              children: listJankenState.map((text) {
-                return Icon(Icons.add);
-              }).toList(),
-          ),
-        ),
+            scrollDirection: Axis.horizontal,
+            child: Column(
+              children: <Widget>[
+                rowJankenIcons(listJankenStateTop),
+                rowJankenIcons(listJankenStateBottom),
+              ],
+            )),
         IconButton(
-          icon: Icon(
-              Icons.add
-          ),
+          icon: Icon(Icons.add),
           onPressed: (() {
             setState(() {
               addJankenState();
@@ -51,12 +49,26 @@ class _TestScreenState extends State<TestScreen> {
     );
   }
 
+  Widget rowJankenIcons(List<JankenState> listJankenState) {
+    return Container(
+      height: 40,
+      color: Colors.blue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: listJankenStateTop.map((jankenState) {
+          return Image(
+            image: AssetImage("assets/janken/${mapJankenStateImage[jankenState]}"),
+            width: 40,
+            height: 40,
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   void addJankenState() {
-    listJankenState.add("JankenState.Scissors");
-    print(listJankenState);
-    mapJankenStateImage.containsKey(JankenState.Stone);
+    listJankenStateTop.add(JankenState.Scissors);
+    listJankenStateBottom.add(JankenState.Scissors);
   }
 }
-
-
-

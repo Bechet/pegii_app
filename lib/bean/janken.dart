@@ -7,9 +7,9 @@ enum JankenState {
 }
 
 const Map mapJankenStateImage = {
-  JankenState.Scissors: "choki.png",
-  JankenState.Sheet: "paa.png",
-  JankenState.Stone: "guu.png",
+  JankenState.Scissors: "choki_500.png",
+  JankenState.Sheet: "paa_500.png",
+  JankenState.Stone: "guu_500.png",
 };
 
 String bindImageFromJankenState(JankenState jankenState) {
