@@ -21,65 +21,27 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   Widget screenContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              children: <Widget>[
-                rowJankenIcons(listJankenStateTop),
-                rowJankenIcons(listJankenStateBottom),
-              ],
-            )),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: (() {
-            setState(() {
-              addJankenState();
-            });
-          }),
-        ),
-      ],
-    );
-  }
-
-  Widget rowJankenIcons(List<JankenState> listJankenState) {
     return Container(
-      height: 40,
-      color: Colors.blue,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: listJankenState.map((jankenState) {
-          return Container(
-            color: jankenState.jankenResult == JankenResult.win ? Colors.green :
-              jankenState.jankenResult == JankenResult.lose ? Colors.red :
-                  Colors.yellow,
+        children: <Widget>[
+          Flexible(
             child: Image(
-              image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
-              width: 40,
-              height: 40,
+              image: AssetImage("assets/janken/choki_500_interior_transparency.png"),
+              fit: BoxFit.fitWidth,
             ),
-          );
-        }).toList(),
-      ),
+          ),
+          Flexible(
+            child: Image(
+            image: AssetImage("assets/janken/choki_500_interior_transparency.png"),
+            fit: BoxFit.fitHeight,
+            ),
+          ),
+        ],
+      )
     );
   }
 
-
-  void addJankenState() {
-    // Brut test
-    JankenFormat jankenFormatTop = RandomUtils.randomJankenFormat();
-    JankenFormat jankenFormatBottom = RandomUtils.randomJankenFormat();
-
-    JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
-    JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
-
-    JankenState jankenStateTop = new JankenState(jankenFormat: jankenFormatTop, jankenResult: jankenResultTop);
-    JankenState jankenStateBottom = new JankenState(jankenFormat: jankenFormatBottom, jankenResult: jankenResultBottom);
-
-    listJankenStateTop.add(jankenStateTop);
-    listJankenStateBottom.add(jankenStateBottom);
-  }
 }

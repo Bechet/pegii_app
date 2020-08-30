@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pegii_app/bean/janken.dart';
+import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/widgets/jankenGameHistoryWidget.dart';
+
+import '../randomUtils.dart';
 
 class Game extends StatefulWidget {
   @override
@@ -8,6 +13,10 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
   Level level;
+  JankenFormat currentEnemyJankenFormat;
+  List<JankenFormat> listPlayerCard = [JankenFormat.Stone, JankenFormat.Scissors, JankenFormat.Sheet];
+  List<JankenState> listJankenStateTop = [];
+  List<JankenState> listJankenStateBottom = [];
 
   @override
   Widget build(BuildContext context) {
@@ -20,72 +29,145 @@ class _GameState extends State<Game> {
       body: Column(
         children: <Widget>[
           // Enemy screen
-          enemyWidget(level),
-          // Player screen
+          Expanded(
+            child: Container(
+              color: Colors.green,
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        // Card
+                        Flexible(
+                          child: Container(
+                            child: Image(
+                              image: AssetImage(
+                                  'assets/janken/Nazo_card.png'),
+//                                  height: 100,
+//                                  width: 100,
+                            ),
+                          ),
+                        ),
+                        // Enemy image
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 2,
+                                )
+                            ),
+                            child: Image(
+                              image: AssetImage(
+                                  'assets/characters/${level.characterImagePackageName}/01.png'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // JankenHistory
+          Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    children: <Widget>[
+                      rowJankenIcons(listJankenStateTop),
+                      rowJankenIcons(listJankenStateBottom),
+                    ],
+                  )),
+            ],
+          ),
+
+          //PlayerWidget
           playerWidget(),
         ],
       ),
     );
   }
 
-  Widget enemyWidget(Level level) {
-    return Expanded(
-      child: Container(
-          color: Colors.red,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: Container(
-                    color: Colors.green,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Card
-                        Container(
-                          margin: EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 20.0),
-                          child: Image(
-                            image: AssetImage('assets/janken/choki_500_interior_transparency.png'),
-                          ),
-                        ),
-                        // Enemy image
-                        Flexible(
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(30.0, 40.0, 20.0, 20.0),
-                            child: Image(
-                              image: AssetImage('assets/characters/${level.characterImagePackageName}/01.png'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.grey,
-                  child: Text("element 2"),
+  Widget playerWidget() {
+    return Container(
+        color: Colors.blue,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: listPlayerCard.map((jankenFormat) =>
+              Flexible(
+              child: Container(
+                margin: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                  )
+                ),
+                child: InkWell(
+                  onTap: () {
+                    onPlayerCardTap(jankenFormat);
+                  },
+                  child: Image(
+                    image: AssetImage("assets/janken/${bindImageFromJankenFormat(jankenFormat)}"),
+                  ),
                 ),
               ),
-            ],
-          )),
+            ),
+          ).toList(),
+        ));
+  }
+
+  Widget rowJankenIcons(List<JankenState> listJankenState) {
+    return Container(
+      color: Colors.blue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: listJankenState.map((jankenState) {
+          return Container(
+            color: jankenState.jankenResult == JankenResult.win ? Colors.green :
+            jankenState.jankenResult == JankenResult.lose ? Colors.red :
+            Colors.yellow,
+            child: Container(
+              child: Image(
+                image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
+                height: 50.0,
+                width: 50.0,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
-  Widget playerWidget() {
-    return Expanded(
-      child: Container(
-          color: Colors.blue,
-          child: Row(
-            children: <Widget>[
-              Text("1"),
-              Text("2"),
-              Text("3"),
-              Text("4"),
-            ],
-          )),
-    );
+  void onPlayerCardTap(JankenFormat jankenFormat) {
+    print(jankenFormat);
+    setState(() {
+      addJankenState(jankenFormat);
+    });
+  }
+
+  void addJankenState(JankenFormat playerJankenFormat) {
+    // Brut test
+    JankenFormat jankenFormatTop = RandomUtils.randomJankenFormat();
+    JankenFormat jankenFormatBottom = playerJankenFormat;
+
+    JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
+    JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
+
+    JankenState jankenStateTop = new JankenState(jankenFormat: jankenFormatTop, jankenResult: jankenResultTop);
+    JankenState jankenStateBottom = new JankenState(jankenFormat: jankenFormatBottom, jankenResult: jankenResultBottom);
+
+    listJankenStateTop.add(jankenStateTop);
+    listJankenStateBottom.add(jankenStateBottom);
   }
 }
