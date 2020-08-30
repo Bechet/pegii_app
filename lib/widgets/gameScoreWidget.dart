@@ -42,4 +42,12 @@ class GameScoreWidgetState extends State<GameScoreWidget> {
       enemyWin();
     }
   }
+
+  int getPlayerScore() {
+    return playerScore;
+  }
+
+  int getEnemyScore() {
+    return enemyScore;
+  }
 }

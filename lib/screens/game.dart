@@ -121,28 +121,61 @@ class _GameState extends State<Game> {
         ));
   }
 
-  void onPlayerCardTap(JankenFormat jankenFormat) {
-    print(jankenFormat);
+  void onPlayerCardTap(JankenFormat playerJankenFormat) {
     setState(() {
-      addJankenState(jankenFormat);
+      JankenFormat enemyJankenFormat = RandomUtils.randomJankenFormat();
+      addJankenState(playerJankenFormat,enemyJankenFormat);
       jankenGameHistoryWidgetState.currentState.update(listJankenStateTop, listJankenStateBottom);
       // update game score
       gameScoreWidgetState.currentState.update(listJankenStateBottom[listJankenStateBottom.length-1].jankenResult);
+
+      if(gameScoreWidgetState.currentState.getPlayerScore() >= 3) {
+        _showMyDialog("you won !", "Ununununu");
+      } else       if(gameScoreWidgetState.currentState.getEnemyScore() >= 3) {
+        _showMyDialog("you lose !", "Zakome !!");
+      }
     });
   }
 
-  void addJankenState(JankenFormat playerJankenFormat) {
+  void addJankenState(JankenFormat playerJankenFormat, JankenFormat enemyJankenFormat) {
     // Brut test
-    JankenFormat jankenFormatTop = RandomUtils.randomJankenFormat();
-    JankenFormat jankenFormatBottom = playerJankenFormat;
 
-    JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
-    JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
+    JankenResult jankenResultTop = getJankenResult(enemyJankenFormat, playerJankenFormat);
+    JankenResult jankenResultBottom = getJankenResult(playerJankenFormat, enemyJankenFormat);
 
-    JankenState jankenStateTop = new JankenState(jankenFormat: jankenFormatTop, jankenResult: jankenResultTop);
-    JankenState jankenStateBottom = new JankenState(jankenFormat: jankenFormatBottom, jankenResult: jankenResultBottom);
+    JankenState jankenStateTop = new JankenState(jankenFormat: enemyJankenFormat, jankenResult: jankenResultTop);
+    JankenState jankenStateBottom = new JankenState(jankenFormat: playerJankenFormat, jankenResult: jankenResultBottom);
 
     listJankenStateTop.add(jankenStateTop);
     listJankenStateBottom.add(jankenStateBottom);
+  }
+
+
+  Future<void> _showMyDialog(String title, String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(content),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
