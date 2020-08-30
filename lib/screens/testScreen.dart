@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pegii_app/RandomUtils.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
+import 'package:pegii_app/widgets/testWidget.dart';
 
 class TestScreen extends StatefulWidget {
   @override
@@ -9,8 +10,7 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  final List<JankenState> listJankenStateTop = [];
-  final List<JankenState> listJankenStateBottom = [];
+  GlobalKey<TestWidgetState> testWidget = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +21,25 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   Widget screenContent() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Flexible(
-            child: Image(
-              image: AssetImage("assets/janken/choki_500_interior_transparency.png"),
-              fit: BoxFit.fitWidth,
+    return Center(
+      child:
+        Column(
+          children: <Widget>[
+            TestWidget(key: testWidget),
+            IconButton(
+              icon: Icon(
+                Icons.add,
+              ),
+              onPressed: () {
+                setState(() {
+                  testWidget.currentState.add();
+                });
+              },
             ),
-          ),
-          Flexible(
-            child: Image(
-            image: AssetImage("assets/janken/choki_500_interior_transparency.png"),
-            fit: BoxFit.fitHeight,
-            ),
-          ),
-        ],
-      )
+          ],
+        ),
     );
   }
-
 }
+
+

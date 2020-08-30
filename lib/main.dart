@@ -7,7 +7,7 @@ import 'package:pegii_app/screens/testScreen.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/home',
+    initialRoute: '/test',
     routes: {
       '/home': (context) => Home(),
       '/loading': (context) => Loading(),
