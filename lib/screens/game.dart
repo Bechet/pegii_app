@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/widgets/gameScoreWidget.dart';
 import 'package:pegii_app/widgets/jankenGameHistoryWidget.dart';
 
 import '../randomUtils.dart';
@@ -18,6 +19,9 @@ class _GameState extends State<Game> {
   List<JankenState> listJankenStateTop = [];
   List<JankenState> listJankenStateBottom = [];
 
+  GlobalKey<JankenGameHistoryWidgetState> jankenGameHistoryWidgetState = GlobalKey();
+  GlobalKey<GameScoreWidgetState> gameScoreWidgetState = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
@@ -27,7 +31,10 @@ class _GameState extends State<Game> {
         title: Text("Level - ${level.nbLevel} ${level.name}"),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+
+          GameScoreWidget(key: gameScoreWidgetState),
           // Enemy screen
           Expanded(
             child: Container(
@@ -74,21 +81,10 @@ class _GameState extends State<Game> {
             ),
           ),
 
-          // JankenHistory
-          Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    children: <Widget>[
-                      rowJankenIcons(listJankenStateTop),
-                      rowJankenIcons(listJankenStateBottom),
-                    ],
-                  )),
-            ],
-          ),
+
+
+          // History
+          JankenGameHistoryWidget(key: jankenGameHistoryWidgetState),
 
           //PlayerWidget
           playerWidget(),
@@ -125,34 +121,13 @@ class _GameState extends State<Game> {
         ));
   }
 
-  Widget rowJankenIcons(List<JankenState> listJankenState) {
-    return Container(
-      color: Colors.blue,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: listJankenState.map((jankenState) {
-          return Container(
-            color: jankenState.jankenResult == JankenResult.win ? Colors.green :
-            jankenState.jankenResult == JankenResult.lose ? Colors.red :
-            Colors.yellow,
-            child: Container(
-              child: Image(
-                image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
-                height: 50.0,
-                width: 50.0,
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   void onPlayerCardTap(JankenFormat jankenFormat) {
     print(jankenFormat);
     setState(() {
       addJankenState(jankenFormat);
+      jankenGameHistoryWidgetState.currentState.update(listJankenStateTop, listJankenStateBottom);
+      // update game score
+      gameScoreWidgetState.currentState.update(listJankenStateBottom[listJankenStateBottom.length-1].jankenResult);
     });
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pegii_app/RandomUtils.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 
@@ -7,10 +6,10 @@ class JankenGameHistoryWidget extends StatefulWidget {
   JankenGameHistoryWidget({Key key}) : super(key: key);
 
   @override
-  _JankenGameHistoryWidgetState createState() => _JankenGameHistoryWidgetState();
+  JankenGameHistoryWidgetState createState() => JankenGameHistoryWidgetState();
 }
 
-class _JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
+class JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
   List<JankenState> listJankenStateTop = [];
   List<JankenState> listJankenStateBottom = [];
 
@@ -18,7 +17,6 @@ class _JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
   Widget build(BuildContext context) {
     return screenContent();
   }
-
 
   Widget screenContent() {
     return Column(
@@ -31,14 +29,7 @@ class _JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
                 rowJankenIcons(listJankenStateTop),
                 rowJankenIcons(listJankenStateBottom),
               ],
-            )),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: (() {
-            setState(() {
-              addJankenState();
-            });
-          }),
+            )
         ),
       ],
     );
@@ -55,10 +46,12 @@ class _JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
             color: jankenState.jankenResult == JankenResult.win ? Colors.green :
             jankenState.jankenResult == JankenResult.lose ? Colors.red :
             Colors.yellow,
-            child: Image(
-              image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
-              width: 40,
-              height: 40,
+            child: Container(
+              child: Image(
+                image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
+                height: 50.0,
+                width: 50.0,
+              ),
             ),
           );
         }).toList(),
@@ -66,19 +59,9 @@ class _JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
     );
   }
 
-
-  void addJankenState() {
-    // Brut test
-    JankenFormat jankenFormatTop = RandomUtils.randomJankenFormat();
-    JankenFormat jankenFormatBottom = RandomUtils.randomJankenFormat();
-
-    JankenResult jankenResultTop = getJankenResult(jankenFormatTop, jankenFormatBottom);
-    JankenResult jankenResultBottom = getJankenResult(jankenFormatBottom, jankenFormatTop);
-
-    JankenState jankenStateTop = new JankenState(jankenFormat: jankenFormatTop, jankenResult: jankenResultTop);
-    JankenState jankenStateBottom = new JankenState(jankenFormat: jankenFormatBottom, jankenResult: jankenResultBottom);
-
-    listJankenStateTop.add(jankenStateTop);
-    listJankenStateBottom.add(jankenStateBottom);
+  /// Update list data & view, called from parent
+  void update(List<JankenState> listJankenStateTop, List<JankenState> listJankenStateBottom) {
+    this.listJankenStateTop = listJankenStateTop;
+    this.listJankenStateBottom = listJankenStateBottom;
   }
 }
