@@ -9,4 +9,8 @@ class RandomUtils {
   static JankenFormat randomJankenFormat() {
     return JankenFormat.values[RANDOM.nextInt(JankenFormat.values.length)];
   }
+
+  static int randomInt(int max) {
+    return RANDOM.nextInt(max);
+  }
 }
