@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/utils/SaveManager.dart';
 import 'package:pegii_app/utils/constant.dart';
 import 'package:pegii_app/widgets/gameScoreWidget.dart';
 import 'package:pegii_app/widgets/jankenGameHistoryWidget.dart';
@@ -44,7 +45,7 @@ class _GameState extends State<Game> {
     level = data['level'];
     return Scaffold(
       appBar: AppBar(
-        title: Text("Level - ${level.nbLevel} ${level.name}"),
+        title: Text("Level - ${level.nbLevel} ${level.character.name}"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +86,7 @@ class _GameState extends State<Game> {
                             ),
                             child: Image(
                               image: AssetImage(
-                                  'assets/characters/${level.characterImagePackageName}/01.png'),
+                                  'assets/characters/${level.character.assetImageFolderName}/01.png'),
                             ),
                           ),
                         ),
@@ -139,18 +140,26 @@ class _GameState extends State<Game> {
 
   void onPlayerCardTap(JankenFormat playerJankenFormat) {
     setState(() {
-      JankenFormat enemyJankenFormat = RandomUtils.randomJankenFormat();
+      JankenFormat enemyJankenFormat = level.character.nextJankenFormat(listJankenStateTop, listJankenStateBottom);
       addJankenState(playerJankenFormat,enemyJankenFormat);
       jankenGameHistoryWidgetState.currentState.update(listJankenStateTop, listJankenStateBottom);
       // update game score
       gameScoreWidgetState.currentState.update(listJankenStateBottom[listJankenStateBottom.length-1].jankenResult);
 
       if(gameScoreWidgetState.currentState.getPlayerScore() >= 3) {
-        _showMyDialog("you won !", "Ununununu");
+        level.nbWin++;
+        saveAndShowPopup("You won !", "Ununununu...");
       } else       if(gameScoreWidgetState.currentState.getEnemyScore() >= 3) {
-        _showMyDialog("you lose !", "Zakome !!");
+        level.nbLose++;
+        saveAndShowPopup("you lose !", "Zakome !!");
       }
     });
+  }
+
+  void saveAndShowPopup(String title, String message) async{
+    await SaveManager.updateLevelAndSave(level);
+    print("saveAndShowPopup, saved: ${level.nbWin}, ${level.nbLose}");
+    _showMyDialog(title, message);
   }
 
   void addJankenState(JankenFormat playerJankenFormat, JankenFormat enemyJankenFormat) {
@@ -185,8 +194,7 @@ class _GameState extends State<Game> {
             FlatButton(
               child: Text('Ok'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                Navigator.popUntil(context, (route) => route.isFirst);
               },
             ),
           ],

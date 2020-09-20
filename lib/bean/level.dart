@@ -1,8 +1,12 @@
+import 'package:pegii_app/bean/character.dart';
+
 class Level {
   int nbLevel;
-  String name;
+  int hardness;
+  int nbWin;
+  int nbLose;
   List<bool> listChallenge;
-  String characterImagePackageName;
+  Character character;
 
-  Level({this.nbLevel, this.name, this.listChallenge, this.characterImagePackageName});
+  Level({this.nbLevel, this.hardness, this.listChallenge, this.character, this.nbLose, this.nbWin});
 }

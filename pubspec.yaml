@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   assets_audio_player: ^2.0.10
+  path_provider: ^1.6.16
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +51,7 @@ flutter:
      - assets/characters/BluePenguin/
      - assets/janken/
      - assets/music/ost/
+     - assets/save/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

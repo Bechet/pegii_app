@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/utils/constant.dart';
+import 'package:pegii_app/widgets/starRow.dart';
 
 class LevelCard extends StatelessWidget {
 
@@ -14,24 +16,33 @@ class LevelCard extends StatelessWidget {
         onTap: (() => onLevelCardTap(level)),
         child: Card(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Column(
                   children: <Widget>[
                     CircleAvatar(
                       backgroundColor: Colors.lightBlueAccent,
-                      backgroundImage: AssetImage('assets/characters/${level.characterImagePackageName}/01.png'),
+                      backgroundImage: AssetImage('assets/characters/${level.character.assetImageFolderName}/01.png'),
                       radius: 20.0,
                     ),
-                    Text(level.name),
+                    Text(level.character.name),
                   ],
                 ),
-                Row(
-                  children: level.listChallenge.map((challenge) {
-                    return Icon(
-                      challenge ? Icons.star : Icons.star_border,
-                      color: Colors.orangeAccent,
-                    );
-                  }).toList(),
+                Column(
+                  children: <Widget>[
+                    StarRow(min: level.hardness, max: Constant.maxHardness),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          "Win: ${level.nbWin} "
+                        ),
+
+                        Text(
+                            "Lose: ${level.nbLose} "
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ],
             )

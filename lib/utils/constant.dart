@@ -3,7 +3,8 @@ class Constant {
 
 
 
-
+  // Game
+  static int maxHardness = 5;
 
 
   // Assets
