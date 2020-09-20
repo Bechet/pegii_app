@@ -50,9 +50,14 @@ class _MainWidgetState extends State<MainWidget> {
   void playIfNotPlaying() {
     if (assetsAudioPlayer.isPlaying.value == false) {
       assetsAudioPlayer.open(
-        Audio("assets/music/ost/Top_Speed.mp3"),
+        Playlist(
+          audios: [
+            Audio(Constant.assetMainOstPath),
+            Audio(Constant.assetBattleOstPath),
+          ]
+        ),
         autoStart: true,
-        showNotification: true,
+        showNotification: false,
         playInBackground: PlayInBackground.disabledRestoreOnForeground,
         loopMode: LoopMode.single,
       );

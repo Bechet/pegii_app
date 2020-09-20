@@ -49,7 +49,7 @@ flutter:
   assets:
      - assets/characters/BluePenguin/
      - assets/janken/
-     - assets/music/ost/Top_Speed.mp3
+     - assets/music/ost/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

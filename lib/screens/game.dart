@@ -1,7 +1,9 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
+import 'package:pegii_app/utils/constant.dart';
 import 'package:pegii_app/widgets/gameScoreWidget.dart';
 import 'package:pegii_app/widgets/jankenGameHistoryWidget.dart';
 
@@ -21,6 +23,20 @@ class _GameState extends State<Game> {
 
   GlobalKey<JankenGameHistoryWidgetState> jankenGameHistoryWidgetState = GlobalKey();
   GlobalKey<GameScoreWidgetState> gameScoreWidgetState = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    AssetsAudioPlayer.withId(Constant.idOstPlayer).playlistPlayAtIndex(1);
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("Game dispose");
+    AssetsAudioPlayer.withId(Constant.idOstPlayer).playlistPlayAtIndex(0);
+  }
 
   @override
   Widget build(BuildContext context) {
