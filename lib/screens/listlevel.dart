@@ -35,10 +35,11 @@ class _ListLevelState extends State<ListLevel> with RouteAware {
 
   Future initSaveData() async {
       List<SaveData> listLevelSaveData = await SaveManager.loadLevelSaveData();
-      print("initSaveData listLevelSaveData, ${listLevelSaveData[0].nbLose} ${listLevelSaveData[0].nbWin} ");
       SaveManager.setListSaveData(listLevelSaveData);
       if (listLevelSaveData.isEmpty) {
         SaveManager.saveLevel(listLevel);
+        List<SaveData> listLevelSaveData = await SaveManager.loadLevelSaveData();
+        SaveManager.setListSaveData(listLevelSaveData);
       } else {
         setState(() {
           for (int i=0; i<listLevel.length; i++) {
