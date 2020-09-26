@@ -5,10 +5,9 @@ import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
 import 'package:pegii_app/utils/SaveManager.dart';
 import 'package:pegii_app/utils/constant.dart';
+import 'package:pegii_app/widgets/enemyAIWidget.dart';
 import 'package:pegii_app/widgets/gameScoreWidget.dart';
 import 'package:pegii_app/widgets/jankenGameHistoryWidget.dart';
-
-import '../randomUtils.dart';
 
 class Game extends StatefulWidget {
   @override
@@ -56,49 +55,9 @@ class _GameState extends State<Game> {
           Expanded(
             child: Container(
               color: Colors.green,
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        // Card
-                        Flexible(
-                          child: Container(
-                            child: Image(
-                              image: AssetImage(
-                                  'assets/janken/Nazo_card.png'),
-//                                  height: 100,
-//                                  width: 100,
-                            ),
-                          ),
-                        ),
-                        // Enemy image
-                        Flexible(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                )
-                            ),
-                            child: Image(
-                              image: AssetImage(
-                                  'assets/characters/${level.character.assetImageFolderName}/01.png'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              child: EnemyAiWidget(character: level.character),
             ),
           ),
-
-
 
           // History
           JankenGameHistoryWidget(key: jankenGameHistoryWidgetState),
@@ -142,6 +101,7 @@ class _GameState extends State<Game> {
     setState(() {
       JankenFormat enemyJankenFormat = level.character.nextJankenFormat(listJankenStateTop, listJankenStateBottom);
       addJankenState(playerJankenFormat,enemyJankenFormat);
+      level.character.updateCurrentImage(level.character.calculateWinLoseStatus(listJankenStateTop[listJankenStateTop.length-1], gameScoreWidgetState.currentState.getPlayerScore() >= 3 || gameScoreWidgetState.currentState.getEnemyScore() >= 3));
       jankenGameHistoryWidgetState.currentState.update(listJankenStateTop, listJankenStateBottom);
       // update game score
       gameScoreWidgetState.currentState.update(listJankenStateBottom[listJankenStateBottom.length-1].jankenResult);
@@ -149,7 +109,7 @@ class _GameState extends State<Game> {
       if(gameScoreWidgetState.currentState.getPlayerScore() >= 3) {
         level.nbWin++;
         saveAndShowPopup("You won !", "Ununununu...");
-      } else       if(gameScoreWidgetState.currentState.getEnemyScore() >= 3) {
+      } else if(gameScoreWidgetState.currentState.getEnemyScore() >= 3) {
         level.nbLose++;
         saveAndShowPopup("you lose !", "Zakome !!");
       }
@@ -182,6 +142,7 @@ class _GameState extends State<Game> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white70.withOpacity(0.5),
           title: Text(title),
           content: SingleChildScrollView(
             child: ListBody(
@@ -192,7 +153,10 @@ class _GameState extends State<Game> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok'),
+              child: Text(
+                  'Ok',
+              ),
+              color: Colors.red.withOpacity(0.8),
               onPressed: () {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },

@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             Image(
               image: AssetImage(
-                "assets/characters/BluePenguin/01.png"
+                "assets/characters/Peggy/Janken_peggy_0 lost_bis.png"
               )
             ),
             Container(

@@ -12,6 +12,8 @@ class JankenGameHistoryWidget extends StatefulWidget {
 class JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
   List<JankenState> listJankenStateTop = [];
   List<JankenState> listJankenStateBottom = [];
+  double iconHeight = 50.0;
+  double iconWidth = 50.0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,9 @@ class JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
   }
 
   Widget screenContent() {
-    return Column(
+    return listJankenStateTop == null || listJankenStateTop.isEmpty ?
+    SizedBox(height: iconHeight*2,) :
+    Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SingleChildScrollView(
@@ -49,8 +53,8 @@ class JankenGameHistoryWidgetState extends State<JankenGameHistoryWidget> {
             child: Container(
               child: Image(
                 image: AssetImage("assets/janken/${bindImageFromJankenState(jankenState)}"),
-                height: 50.0,
-                width: 50.0,
+                height: iconHeight,
+                width: iconWidth,
               ),
             ),
           );

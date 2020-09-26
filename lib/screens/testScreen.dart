@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pegii_app/utils/SaveManager.dart';
-import 'package:pegii_app/widgets/testWidget.dart';
+import 'package:pegii_app/bean/CharacterRandomPenguin.dart';
+import 'package:pegii_app/bean/character.dart';
+import 'package:pegii_app/widgets/enemyAIWidget.dart';
 
 class TestScreen extends StatefulWidget {
   @override
@@ -8,7 +9,7 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  GlobalKey<TestWidgetState> testWidget = GlobalKey();
+  Character character = CharacterRandomPenguin();
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +22,8 @@ class _TestScreenState extends State<TestScreen> {
   Widget screenContent() {
     return Container
       (
-      child: Row(
-        children: <Widget>[
-          MaterialButton(
-            child: Text("loadFromFile"),
-            onPressed: (() {
-              SaveManager.loadLevelSaveData();
-            }),
-          ),
-        ],
-      ),
-    );
+        child: EnemyAiWidget(character: character),
+      );
   }
 
 

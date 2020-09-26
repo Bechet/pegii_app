@@ -22,7 +22,7 @@ class LevelCard extends StatelessWidget {
                   children: <Widget>[
                     CircleAvatar(
                       backgroundColor: Colors.lightBlueAccent,
-                      backgroundImage: AssetImage('assets/characters/${level.character.assetImageFolderName}/01.png'),
+                      backgroundImage: AssetImage('assets/characters/${level.character.assetImageFolderName}/${level.character.currentImageFileName}'),
                       radius: 20.0,
                     ),
                     Text(level.character.name),

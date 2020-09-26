@@ -16,7 +16,7 @@ class CreaditScreen extends StatelessWidget {
             children: <Widget>[
               Image(
                 image: AssetImage(
-                    "assets/characters/BluePenguin/02.png"
+                    "assets/characters/Peggy/Janken_peggy_2 lost_bis.png"
                 ),
               ),
               Text(
