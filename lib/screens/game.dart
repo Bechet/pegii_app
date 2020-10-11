@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pegii_app/bean/character.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
@@ -20,6 +21,7 @@ class _GameState extends State<Game> {
   List<JankenFormat> listPlayerCard = [JankenFormat.Stone, JankenFormat.Scissors, JankenFormat.Sheet];
   List<JankenState> listJankenStateTop = [];
   List<JankenState> listJankenStateBottom = [];
+  List<bool> listState = [];
 
   GlobalKey<JankenGameHistoryWidgetState> jankenGameHistoryWidgetState = GlobalKey();
   GlobalKey<GameScoreWidgetState> gameScoreWidgetState = GlobalKey();
@@ -101,7 +103,6 @@ class _GameState extends State<Game> {
     setState(() {
       JankenFormat enemyJankenFormat = level.character.nextJankenFormat(listJankenStateTop, listJankenStateBottom);
       addJankenState(playerJankenFormat,enemyJankenFormat);
-      level.character.updateCurrentImage(level.character.calculateWinLoseStatus(listJankenStateTop[listJankenStateTop.length-1], gameScoreWidgetState.currentState.getPlayerScore() >= 3 || gameScoreWidgetState.currentState.getEnemyScore() >= 3));
       jankenGameHistoryWidgetState.currentState.update(listJankenStateTop, listJankenStateBottom);
       // update game score
       gameScoreWidgetState.currentState.update(listJankenStateBottom[listJankenStateBottom.length-1].jankenResult);
@@ -113,6 +114,26 @@ class _GameState extends State<Game> {
         level.nbLose++;
         saveAndShowPopup("you lose !", "Zakome !!");
       }
+      changeEnemyImage();
+    });
+  }
+
+  void changeEnemyImage() async {
+    listState.add(true);
+    level.character.updateCurrentImage(level.character.calculateWinLoseStatus(listJankenStateTop[listJankenStateTop.length-1], gameScoreWidgetState.currentState.getPlayerScore() >= 3 || gameScoreWidgetState.currentState.getEnemyScore() >= 3));
+    await Future.delayed(const Duration(seconds: 2));
+    print(listState.length);
+    if (listState.length >= 1) {
+      if (listState.length == 1 && gameScoreWidgetState.currentState.getPlayerScore() <3 && gameScoreWidgetState.currentState.getEnemyScore() <3) {
+        changeEnemyImageFromLoseStatus();
+      }
+      listState.removeLast();
+    }
+  }
+
+  void changeEnemyImageFromLoseStatus() {
+    setState(() {
+      level.character.updateCurrentImage(level.character.calculateDefaultStatus(gameScoreWidgetState.currentState.getPlayerScore()));
     });
   }
 
@@ -166,4 +187,5 @@ class _GameState extends State<Game> {
       },
     );
   }
+
 }

@@ -54,6 +54,23 @@ abstract class Character {
     return WinLoseStatus.initial;
   }
 
+  WinLoseStatus calculateDefaultStatus(int nbLost) {
+    switch (nbLost) {
+      case 0: {
+        return WinLoseStatus.loseGameSet0;
+      }
+      case 1: {
+        return WinLoseStatus.loseGameSet1;
+      }
+      case 2: {
+        return WinLoseStatus.loseGameSet2;
+      }
+      case 3: {
+        return WinLoseStatus.loseGameSet;
+      }
+    }
+  }
+
   void updateCurrentImage(WinLoseStatus winLoseStatus) {
     this.currentImageFileName = calculateImage(winLoseStatus);
   }
