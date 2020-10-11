@@ -122,8 +122,7 @@ class _GameState extends State<Game> {
     listState.add(true);
     level.character.updateCurrentImage(level.character.calculateWinLoseStatus(listJankenStateTop[listJankenStateTop.length-1], gameScoreWidgetState.currentState.getPlayerScore() >= 3 || gameScoreWidgetState.currentState.getEnemyScore() >= 3));
     await Future.delayed(const Duration(seconds: 2));
-    print(listState.length);
-    if (listState.length >= 1) {
+    if (listState.length >= 1 && gameScoreWidgetState != null && gameScoreWidgetState.currentState != null) {
       if (listState.length == 1 && gameScoreWidgetState.currentState.getPlayerScore() <3 && gameScoreWidgetState.currentState.getEnemyScore() <3) {
         changeEnemyImageFromLoseStatus();
       }
