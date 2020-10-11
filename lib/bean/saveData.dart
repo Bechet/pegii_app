@@ -16,4 +16,8 @@ class SaveData {
         'nbWin': nbWin,
         'nbLose': nbLose,
       };
+
+  String customToString() {
+    return "SaveData, nbLevel: " + this.nbLevel.toString() + " , nbLose: " + this.nbLose.toString() +" , nbWin: " + this.nbWin.toString();
+  }
 }

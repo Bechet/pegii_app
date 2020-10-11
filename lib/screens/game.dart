@@ -1,6 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:pegii_app/bean/character.dart';
 import 'package:pegii_app/bean/janken.dart';
 import 'package:pegii_app/bean/jankenState.dart';
 import 'package:pegii_app/bean/level.dart';
@@ -56,7 +55,7 @@ class _GameState extends State<Game> {
           // Enemy screen
           Expanded(
             child: Container(
-              color: Colors.green,
+              color: Constant.listBackgroundColor[level.hardness],
               child: EnemyAiWidget(character: level.character),
             ),
           ),

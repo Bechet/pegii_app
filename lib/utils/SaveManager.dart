@@ -52,7 +52,13 @@ class SaveManager {
 
   static Future updateLevelAndSave(Level levelToUpdate) async {
     final SaveData saveData = SaveData(nbLose: levelToUpdate.nbLose, nbLevel: levelToUpdate.nbLevel, nbWin:  levelToUpdate.nbWin);
-    listSaveData[levelToUpdate.nbLevel-1] = saveData;
+    if (listSaveData != null && listSaveData.length > levelToUpdate.nbLevel-1) {
+      for (int i=0; i<listSaveData.length; i++) {
+        if (listSaveData[i].nbLevel == levelToUpdate.nbLevel) {
+          listSaveData[i] = saveData;
+        }
+      }
+    }
     return save(listSaveData);
   }
 
@@ -71,7 +77,4 @@ class SaveManager {
     }
     return listSaveData;
   }
-
-
-
 }
